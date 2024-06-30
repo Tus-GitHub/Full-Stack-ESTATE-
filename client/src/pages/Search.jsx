@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ListingItem from '../components/ListingItem';
 
 export default function Search() {
     const [sidebardata, setSidebardata] = useState({
-        SearchTerm: '',
+        searchTerm: '',
         type: 'all',
         parking: false,
         furnished: false,
@@ -13,13 +14,12 @@ export default function Search() {
     });
     const [loading, setLoading] = useState(false);
     const [listings, setListings] = useState([]);
-    console.log(listings);
  
     const navigate = useNavigate();
     
     useEffect(()=> {
         const urlParams = new URLSearchParams(location.search);
-        const searchTermFromUrl = urlParams.get('SearchTerm');
+        const searchTermFromUrl = urlParams.get('searchTerm');
         const typeFromUrl = urlParams.get('type');
         const parkingFromUrl = urlParams.get('parking');
         const furnishedFromUrl = urlParams.get('furnished');
@@ -37,7 +37,7 @@ export default function Search() {
             orderFromUrl
         ){
             setSidebardata({
-                SearchTerm: searchTermFromUrl || '',
+                searchTerm: searchTermFromUrl || '',
                 type: typeFromUrl || 'all',
                 parking: parkingFromUrl === 'true' ? true: false,
                 furnished:  furnishedFromUrl === 'true' ? true: false,
@@ -65,7 +65,7 @@ export default function Search() {
             setSidebardata({...sidebardata, type:e.target.id});
         }
         if(e.target.id === 'searchTerm'){
-            setSidebardata({...sidebardata, SearchTerm:e.target.value});
+            setSidebardata({...sidebardata, searchTerm:e.target.value});
         }
         if(e.target.id === 'parking' || e.target.id === 'offer' || e.target.id === 'furnished'){
             setSidebardata({...sidebardata, [e.target.id] : e.target.checked || e.target.checked === 'true' ? true: false});
@@ -81,7 +81,7 @@ export default function Search() {
         e.preventDefault();
 
         const urlParams = new URLSearchParams();
-        urlParams.set('SearchTerm', sidebardata.SearchTerm);
+        urlParams.set('searchTerm', sidebardata.searchTerm);
         urlParams.set('type', sidebardata.type);
         urlParams.set('parking', sidebardata.parking);
         urlParams.set('furnished', sidebardata.furnished);
@@ -104,7 +104,7 @@ export default function Search() {
                         id= 'searchTerm'
                         placeholder= 'Search...'
                         className= 'border rounded-lg p-3 w-full'
-                        value={sidebardata.SearchTerm}
+                        value={sidebardata.searchTerm}
                         onChange={handleChange}
                     />
                 </div>
@@ -186,9 +186,21 @@ export default function Search() {
                 <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>Search</button>
             </form>
         </div>
-        <div className=''>
-            <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>Listing results</h1>
+        <div className='flex-1'>
+            <h1 className='text-3xl font-semibold border-b p-3 text-slate-700 mt-5'>Listing results:</h1>
+            <div className='p-7 flex flex-wrap gap-4'>
+                {!loading && listings.length === 0 && (
+                    <p className='text-xl text-slate-700'>No Listing found!</p>
+                ) }
+                {loading && (
+                    <p className='text-xl text-slate-700 text-center w-full'>Loading...</p>
+                )}
+                {!loading && listings && listings.map((listing) => (
+                    <ListingItem key={listing._id} listing={listing} /> 
+                ))}
+            </div>
         </div>
     </div>
   )
 }
+ 
