@@ -56,10 +56,11 @@ export default function Home() {
           place with ease
         </h1>
         <div className='text-gray-400 text-xs sm:text-sm'>
-          Sahand Estate is the best place to find your next perfect place to
-          live.
+        Welcome to Real Estate, where dreams find their home. Discover exceptional properties and personalized service tailored to your unique needs.
           <br />
-          We have a wide range of properties for you to choose from.
+          Whether you're buying, selling, or investing, let us guide you through every step of your real estate journey with expertise and integrity.
+          <br /> 
+          Explore our listings and experience the difference with Real Estate Your perfect home awaits.
         </div>
         <Link
           to={'/search'}
